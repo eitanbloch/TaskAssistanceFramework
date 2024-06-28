@@ -1,0 +1,120 @@
+from datetime import datetime
+
+import imageio
+import numpy as np
+import matplotlib.pyplot as plt
+import time
+from mpl_toolkits.mplot3d import Axes3D
+import plotly.graph_objects as go
+
+
+class Visualize_UR(object):
+    def __init__(self, ur_params, env, transform, transform_camera, bb):
+        self.fig = plt.figure()
+        self.ax = self.fig.add_subplot(111, projection='3d')
+        self.colors = ur_params.ur_links_color
+        self.sphere_radius = ur_params.sphere_radius
+        self.end_effector_pos = np.array([0, 0, 0, 1])
+        self.env = env
+        self.transform = transform
+        self.transform_camera = transform_camera
+        self.bb = bb
+        plt.ion()
+        plt.show()
+
+    def plot_links(self, end_efctors):
+        for link_edge in end_efctors:
+            self.ax.scatter(link_edge[0], link_edge[1], link_edge[2])
+        for i in range(len(end_efctors) - 1):
+            self.ax.plot([end_efctors[i][0], end_efctors[i + 1][0]], [end_efctors[i][1], end_efctors[i + 1][1]],
+                         [end_efctors[i][2], end_efctors[i + 1][2]])
+
+    def show(self, end_effctors=None):
+        self.ax.set_xlabel('x')
+        self.ax.set_ylabel('y')
+        self.ax.set_zlabel('z')
+        w, h = 3, 3
+        self.ax.set_xlim3d([-w / 2, w / 2])
+        self.ax.set_ylim3d([-h / 2, h / 2])
+        # self.ax.set_xlim3d([-0.7, 0.7])
+        # self.ax.set_ylim3d([-0.7, 0.7])
+        self.ax.set_zlim3d([0, 1.0])
+        self.ax.plot([0, 0.5], [0, 0], [0, 0], c='red')
+        self.ax.plot([0, 0], [0, 0.5], [0, 0], c='green')
+        self.ax.plot([0, 0], [0, 0], [0, 0.5], c='blue')
+        self.draw_obstacles()
+        self.fig.canvas.flush_events()
+
+    def draw_obstacles(self):
+        """
+        Draws the spheres constructing the obstacles
+        """
+        u, v = np.mgrid[0:2 * np.pi:10j, 0:np.pi:10j]
+        for sphere in self.env.obstacles:
+            x = np.cos(u) * np.sin(v) * self.env.radius + sphere[0]
+            y = np.sin(u) * np.sin(v) * self.env.radius + sphere[1]
+            z = np.cos(v) * self.env.radius + sphere[2]
+            self.ax.plot_surface(x, y, z, color='red', alpha=0.5)
+
+    def draw_field_of_vew(self):
+        pass
+
+    def draw_spheres(self, global_sphere_coords, track_end_effector=False):
+        """
+        Draws the spheres constructing the manipulator
+        """
+        u, v = np.mgrid[0:2 * np.pi:10j, 0:np.pi:10j]
+        for frame in global_sphere_coords.keys():
+            for sphere_coords in global_sphere_coords[frame]:
+                x = np.cos(u) * np.sin(v) * self.sphere_radius[frame] + sphere_coords[0]
+                y = np.sin(u) * np.sin(v) * self.sphere_radius[frame] + sphere_coords[1]
+                z = np.cos(v) * self.sphere_radius[frame] + sphere_coords[2]
+
+                self.ax.plot_surface(x, y, z, color=self.colors[frame], alpha=0.3)
+        if track_end_effector:
+            self.end_effector_pos = np.vstack((self.end_effector_pos, global_sphere_coords['wrist_3_link'][-1]))
+            self.ax.scatter(self.end_effector_pos[:, 0], self.end_effector_pos[:, 1], self.end_effector_pos[:, 2])
+
+
+    # TODO - needs to recieve a zip of path both for robot and for camera
+
+    # TODO - show path receives two configurations
+    def show_path(self, path):
+        """
+        Plots the path
+        """
+        confs = path[0]
+        confs_camera = path[1]
+        tot_confs = zip(confs, confs_camera)
+        idx = 0
+        for zip_conf in tot_confs:
+            conf = zip_conf[0]
+            conf_camera = zip_conf[1]
+            global_sphere_coords = self.transform.conf2sphere_coords(conf)
+            self.draw_spheres(global_sphere_coords, track_end_effector=True)
+
+            global_sphere_coords_camera = self.transform_camera.conf2sphere_coords(conf_camera)
+            self.draw_spheres(global_sphere_coords_camera, track_end_effector=True)
+
+            # plt.ioff()
+            self.show()
+            self.fig.savefig('images/plot' + str(idx) + '.png', dpi=300)
+            plt.show()
+            time.sleep(0.1)
+            self.ax.axes.clear()
+            idx += 1
+
+    def show_conf(self, conf: np.array, conf_camera: np.array):
+        """
+        Plots configuration
+        """
+        global_sphere_coords = self.transform.conf2sphere_coords(conf)
+        self.draw_spheres(global_sphere_coords, track_end_effector=True)
+
+        global_sphere_coords_camera = self.transform_camera.conf2sphere_coords(conf_camera)
+        self.draw_spheres(global_sphere_coords_camera, track_end_effector=True)
+
+        # plt.ioff()
+        self.show()
+        plt.show(block=True)
+        self.ax.axes.clear()
