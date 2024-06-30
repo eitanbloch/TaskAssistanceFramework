@@ -17,9 +17,6 @@ if __name__ == '__main__':
         env = Environment(env_idx=4)
         transform = Transform(ur_params)
 
-        # Define the new position for the base link
-        new_base_position = np.array([0.5, 0, -0.1625])
-
         transform_camera = Transform(ur_params_camera)
         # moves the camera to the new position on x-axis
         transform_camera.make_camera(x_translation=1.08)
