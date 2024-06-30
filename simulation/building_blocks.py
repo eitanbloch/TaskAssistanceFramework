@@ -209,27 +209,9 @@ class Building_Blocks(object):
 
         global_sphere_coords_camera = self.transform_camera.conf2sphere_coords(conf_camera)
 
-        # print("checking robot obstacle collision")
-        # robot_obstacle_collision = self.robot_obstacle_collision(global_sphere_coords_camera)
-        # if robot_obstacle_collision:
-        #     print("robot obstacle collision")
-        #     return True
-
-        # print("checking camera obstacle collision")
-        # TODO - we always have to have the same inflation factor for both robots !!!
-        # camera_obstacle_collision = self.camera_obstacle_collision(global_sphere_coords_camera)
-        # if camera_obstacle_collision:
-        #     print("camera obstacle collision")
-        #     print("camera configuration", conf_camera)
-        #     print("robot configuration", conf)
-        #     return True
-
-        # print("checking camera robot collision")
-        # TODO - we always have to have the same inflation factor for both robots !!!
         robot_camera_collision = self.camera_robot_collision(global_sphere_coords, global_sphere_coords_camera)
 
         if robot_camera_collision:
-            # print("robot camera collision")
             return True
 
         return False
@@ -286,19 +268,12 @@ class Building_Blocks(object):
         # from cam_vec to (0,0,0) angles
         cam_vec = cam_vec / np.linalg.norm(cam_vec)
         cam_angle_x, cam_angle_y, cam_angle_z = np.arccos(cam_vec[0]), np.arccos(cam_vec[1]), np.arccos(cam_vec[2])
-        # print("angle_x", np.rad2deg(angle_x))
-        # print("angle_y", np.rad2deg(angle_y))
-        # print("angle_z", np.rad2deg(angle_z))
 
         # calculate the vector between the camera and the task point
         end_cam_to_task = task_p - p1
         end_cam_to_task = end_cam_to_task / np.linalg.norm(end_cam_to_task)
         end_cam_to_task_angle_x, cam_to_task_angle_y, cam_to_task_angle_z = np.arccos(end_cam_to_task[0]), np.arccos(
             end_cam_to_task[1]), np.arccos(end_cam_to_task[2])
-
-        # print("cam_to_task_angle_x", np.rad2deg(cam_to_task_angle_x))
-        # print("cam_to_task_angle_y", np.rad2deg(cam_to_task_angle_y))
-        # print("cam_to_task_angle_z", np.rad2deg(cam_to_task_angle_z))
 
         fin_angle_x, fin_angle_y = abs(np.rad2deg(cam_angle_x - end_cam_to_task_angle_x)), abs(
             np.rad2deg(cam_angle_y - cam_to_task_angle_y))
@@ -309,11 +284,6 @@ class Building_Blocks(object):
             return True
 
     def is_visible(self, conf, conf_camera) -> (bool, list):
-        # for link in self.ur_params_camera.ur_links:
-        #     radiuses_sum = self.ur_params_camera.sphere_radius[link] + self.ur_params.sphere_radius[link]
-        #     for x1_cam_coord, y1_cam_coord, z1_cam_coord, rad1_cam in global_sphere_coords_camera[link]:
-
-        # wrist_3_link - last link
 
         # get camera position
         global_sphere_coords_camera = self.transform_camera.conf2sphere_coords(conf_camera)
@@ -341,7 +311,7 @@ class Building_Blocks(object):
         confs_num = max(confs_num, min_confs_num)
         confs = np.linspace(start=conf_camera, stop=conf, num=confs_num, endpoint=True)
 
-        # make sure that doesn't intersect with obstacles or robot parts!
+        # make sure that doesn't intersect with obstacles or robot parts
         confs_w_radius = [np.append(arr, 1) for arr in confs]
 
         for c in confs:
@@ -410,7 +380,6 @@ class Building_Blocks(object):
             collision = self.is_in_collision(conf[0], conf[1])
             if collision:
                 return False, ([], [])
-        # print("number of intermediates", len(confs), len(confs_camera))
         # confs - the configurations of the task robots
         # confs_camera - the configurations of the camera robot
         return True, (confs, confs_camera)

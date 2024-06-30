@@ -76,9 +76,6 @@ class Visualize_UR(object):
             self.ax.scatter(self.end_effector_pos[:, 0], self.end_effector_pos[:, 1], self.end_effector_pos[:, 2])
 
 
-    # TODO - needs to recieve a zip of path both for robot and for camera
-
-    # TODO - show path receives two configurations
     def show_path(self, path):
         """
         Plots the path
@@ -96,7 +93,6 @@ class Visualize_UR(object):
             global_sphere_coords_camera = self.transform_camera.conf2sphere_coords(conf_camera)
             self.draw_spheres(global_sphere_coords_camera, track_end_effector=True)
 
-            # plt.ioff()
             self.show()
             self.fig.savefig('images/plot' + str(idx) + '.png', dpi=300)
             plt.show()
@@ -114,7 +110,6 @@ class Visualize_UR(object):
         global_sphere_coords_camera = self.transform_camera.conf2sphere_coords(conf_camera)
         self.draw_spheres(global_sphere_coords_camera, track_end_effector=True)
 
-        # plt.ioff()
         self.show()
         plt.show(block=True)
         self.ax.axes.clear()

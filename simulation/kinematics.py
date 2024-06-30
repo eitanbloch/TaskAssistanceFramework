@@ -197,7 +197,6 @@ class Transform(object):
             alpha, a, d, theta_const = self.ur[i]
             theta = conf[i] + theta_const
 
-            # thisssssssssssss was the change !!!!!
             if i == 0:
                 a += self.x_translation  # 0.5 is the distance between the shoulder_link and the base_link
 
