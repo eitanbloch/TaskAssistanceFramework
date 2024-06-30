@@ -10,9 +10,9 @@ task_robot = TaskRobot()
 def execute_final():
     """
     Function to execute the final path for the robots.
-
     The function first resets the robots, then starts the task for the task robot and the path for the assistance robot.
     """
+
     path = [[-1.2, -1.5707963267948966, 0.0, -1.5707963267948966, 0.0, 0.0],
             [-1.2678492704974573, -0.42810101926837163, -0.42377644777297974, -3.267893453637594, 0.8418788909912109,
              0.5439426898956299],

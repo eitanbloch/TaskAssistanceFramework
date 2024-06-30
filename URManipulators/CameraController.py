@@ -80,7 +80,6 @@ class CameraWrapper:
     def is_visible(self, show=True):
         """
         Function to check if an object is visible in the camera feed.
-
         :param show: A boolean indicating whether to show the camera feed or not.
         :return: A boolean indicating whether an object is detected in the camera feed.
         """
@@ -106,7 +105,6 @@ class CameraWrapper:
     def camera_feed(self, detection=True):
         """
         Function to start the camera feed.
-
         :param detection: A boolean indicating whether to perform object detection in the camera feed or not.
         """
         if detection:

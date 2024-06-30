@@ -5,7 +5,6 @@ from numpy import pi
 
 from urx import Robot
 
-
 class BaseRobot:
     """
     A class that represents a basic robot with fundamental functionalities.
@@ -29,7 +28,6 @@ class BaseRobot:
     def move(self, config):
         """
         Moves the robot to the given configuration.
-
         :param config: The target configuration to move the robot to.
         """
         dist = lambda a, b: np.linalg.norm(np.array(a) - np.array(b))
@@ -50,7 +48,6 @@ class BaseRobot:
     def get_config(self):
         """
         Returns the current configuration of the robot.
-
         :return: The current configuration of the robot.
         """
         return self.robot.getj()
@@ -58,7 +55,6 @@ class BaseRobot:
     def execute_path(self, path, timing_profile=None):
         """
         Executes the given path with the robot.
-
         :param path: List of configurations that represents the path.
         :param timing_profile: Transition times between each pair of configurations.
         """
@@ -134,7 +130,6 @@ class TaskRobot(BaseRobot):
     def is_running(self):
         """
         Checks if the robot is currently running a task.
-
         :return: True if the robot is running a task, False otherwise.
         """
         return self._is_running

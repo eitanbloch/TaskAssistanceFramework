@@ -12,7 +12,6 @@ task_robot = TaskRobot()
 def save(filename, data):
     """
     Function to save data to a file using pickle.
-
     :param filename: The name of the file to save the data to.
     :param data: The data to save.
     """
@@ -23,7 +22,6 @@ def save(filename, data):
 def load(filename):
     """
     Function to load data from a file using pickle.
-
     :param filename: The name of the file to load the data from.
     :return: The loaded data, or an empty dictionary if the file does not exist.
     """
@@ -65,7 +63,6 @@ def compute_task_time():
 def compute_intervals():
     """
     Function to compute the intervals during which an object is visible in the camera feed while the task robot is executing its task.
-
     :return: A list of tuples representing the start and end times of each interval.
     """
     intervals = []
