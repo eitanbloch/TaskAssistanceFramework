@@ -70,7 +70,7 @@ Files:
 
 <details>
   <summary style="color:lightblue;">generate_intervals.py</summary>
-     Compute the intervals in which th gripper is visible from the camera feed while the task robot is executing its task.
+     Compute the intervals in which the gripper is visible from the camera feed while the task robot is executing its task.
 </details>
 
 <details>
