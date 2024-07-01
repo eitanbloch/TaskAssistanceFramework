@@ -209,9 +209,23 @@ class Building_Blocks(object):
 
         global_sphere_coords_camera = self.transform_camera.conf2sphere_coords(conf_camera)
 
+        print("checking robot obstacle collision")
+        robot_obstacle_collision = self.robot_obstacle_collision(global_sphere_coords)
+        if robot_obstacle_collision:
+            print("robot obstacle collision")
+            return True
+
+        print("checking camera obstacle collision")
+        camera_obstacle_collision = self.camera_obstacle_collision(global_sphere_coords_camera)
+        if camera_obstacle_collision:
+            print("camera obstacle collision")
+            return True
+
+        print("checking camera robot collision")
         robot_camera_collision = self.camera_robot_collision(global_sphere_coords, global_sphere_coords_camera)
 
         if robot_camera_collision:
+            print("robot camera collision")
             return True
 
         return False
