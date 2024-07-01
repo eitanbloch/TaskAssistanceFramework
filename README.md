@@ -88,7 +88,6 @@ Files:
 ## **Real Robots Connection Instructions**
 
 
-
 ### step 1 - connect to the TP-Link_8BC0 router
 The first option is to connect via wifi.
 
@@ -110,7 +109,7 @@ Important IP addresses:
 - URe3: 192.168.0.11
 - Camera: 192.168.0.3
 
-### Example Code
+### Code Example
 
 ```jsx
 from Robots import TaskRobot, AssistanceRobot
